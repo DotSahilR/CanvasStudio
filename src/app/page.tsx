@@ -18,7 +18,7 @@ import TeamShowcase, { type TeamMember } from "@/components/ui/team-showcase";
 import { createClient } from "@/lib/supabase";
 
 const IMG = {
-  hero: "https://hvansfddxwulquacakou.supabase.co/storage/v1/object/public/gallery/hero1.png",
+  hero: "/hero1.png",
   hip: "https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=1200&q=80",
   contemp:
     "https://images.unsplash.com/photo-1518834107812-67b0b7c58434?auto=format&fit=crop&w=1200&q=80",
@@ -81,6 +81,7 @@ function Hero() {
   });
   const y = useTransform(scrollYProgress, [0, 1], [0, 220]);
   const scale = useTransform(scrollYProgress, [0, 1], [1, 1.15]);
+
   return (
     <section
       ref={ref}
@@ -105,6 +106,7 @@ function Hero() {
           text="Move Without"
           className="text-display leading-[0.85] tracking-tight text-[clamp(2.75rem,10vw,9rem)] font-black"
         />
+
         <div className="flex flex-wrap items-baseline gap-x-5">
           <SplitReveal
             text="Limits."
@@ -120,6 +122,7 @@ function Hero() {
             Explore classes{" "}
             <ArrowUpRight className="h-4 w-4 transition-transform group-hover:rotate-45" />
           </Link>
+
           <Link
             href="/about"
             className="inline-flex items-center gap-2 rounded-full border border-background/30 bg-background/5 px-6 py-3.5 text-sm text-background backdrop-blur-md"
@@ -146,7 +149,9 @@ function Marquee() {
     "Breaking",
     "Freestyle",
   ];
+
   const row = [...words, ...words];
+
   return (
     <section className="border-y border-black/5 py-6 overflow-hidden">
       <div className="flex gap-10 whitespace-nowrap marquee">
@@ -185,9 +190,11 @@ function WorkshopCard({
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.8 }}
         />
+
         <div className="absolute left-4 top-4 rounded-full bg-background/90 px-3 py-1 text-[10px] uppercase tracking-widest text-foreground backdrop-blur">
           {w.tag}
         </div>
+
         <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between rounded-2xl bg-black/50 px-4 py-3 text-background backdrop-blur-md">
           <div className="text-xs uppercase tracking-widest opacity-80">
             Instructor
@@ -201,9 +208,11 @@ function WorkshopCard({
           <div className="text-xs uppercase tracking-widest text-muted-foreground">
             {w.date}
           </div>
+
           <h3 className="text-display mt-3 text-4xl md:text-5xl leading-[0.95]">
             {w.title}
           </h3>
+
           <p className="mt-4 max-w-md text-sm leading-relaxed text-muted-foreground">
             {w.desc}
           </p>
@@ -212,9 +221,11 @@ function WorkshopCard({
             <span className="inline-flex items-center gap-1.5 rounded-full bg-cream px-3 py-1.5">
               <Clock className="h-3 w-3" /> {w.time}
             </span>
+
             <span className="inline-flex items-center gap-1.5 rounded-full bg-cream px-3 py-1.5">
               <IndianRupee className="h-3 w-3" /> {formatINR(w.price)}
             </span>
+
             <span className="inline-flex items-center gap-1.5 rounded-full bg-cream px-3 py-1.5">
               <MapPin className="h-3 w-3" /> Studio Canvas
             </span>
@@ -229,6 +240,7 @@ function WorkshopCard({
             Reserve Now{" "}
             <ArrowUpRight className="h-4 w-4 transition-transform group-hover:rotate-45" />
           </Link>
+
           <Link
             href="/classes"
             className="text-xs uppercase tracking-widest text-muted-foreground underline underline-offset-4"
@@ -242,16 +254,47 @@ function WorkshopCard({
 }
 
 function FeaturedWorkshops() {
-  const [features, setFeatures] = useState<{ id: string; label: string; image: string; description: string; meta: string; price: string; instructor: string; href: { pathname: "/book"; query: { workshop: string } } }[]>([]);
+  const [
+    features,
+    setFeatures,
+  ] = useState<
+    {
+      id: string;
+      label: string;
+      image: string;
+      description: string;
+      meta: string;
+      price: string;
+      instructor: string;
+      href: {
+        pathname: "/book";
+        query: { workshop: string };
+      };
+    }[]
+  >([]);
+
   useEffect(() => {
-    createClient().from("workshops").select("*").limit(4).then(({ data }) => {
-      if (data) setFeatures(data.map((w) => ({
-        id: w.slug, label: w.title, image: w.img, description: w.title,
-        meta: `${w.date} · ${w.time}`, price: formatINR(w.price).replace("₹", ""),
-        instructor: w.instructor, href: bookLink(w.slug),
-      })));
-    });
+    createClient()
+      .from("workshops")
+      .select("*")
+      .limit(4)
+      .then(({ data }) => {
+        if (data)
+          setFeatures(
+            data.map((w) => ({
+              id: w.slug,
+              label: w.title,
+              image: w.img,
+              description: w.title,
+              meta: `${w.date} · ${w.time}`,
+              price: formatINR(w.price).replace("₹", ""),
+              instructor: w.instructor,
+              href: bookLink(w.slug),
+            }))
+          );
+      });
   }, []);
+
   return (
     <section className="mx-auto max-w-7xl px-6 py-28">
       <div className="mb-14 flex flex-wrap items-end justify-between gap-6">
@@ -259,11 +302,13 @@ function FeaturedWorkshops() {
           <div className="text-xs uppercase tracking-widest text-muted-foreground">
             02 — Featured Workshops
           </div>
+
           <SplitReveal
             text="Learn from the movers you follow."
             className="text-display mt-3 max-w-3xl text-5xl md:text-7xl"
           />
         </div>
+
         <Link
           href="/classes"
           className="text-sm underline underline-offset-8"
@@ -271,6 +316,7 @@ function FeaturedWorkshops() {
           See all workshops
         </Link>
       </div>
+
       <FeatureCarousel features={features} />
     </section>
   );
@@ -278,6 +324,7 @@ function FeaturedWorkshops() {
 
 function WeeklySchedule() {
   const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
   const slots = [
     {
       time: "03:00 PM – 05:00 PM",
@@ -312,6 +359,7 @@ function WeeklySchedule() {
       slug: "humraah",
     },
   ];
+
   return (
     <section className="bg-cream py-28">
       <div className="mx-auto max-w-7xl px-6">
@@ -320,28 +368,31 @@ function WeeklySchedule() {
             <div className="text-xs uppercase tracking-widest text-muted-foreground">
               04 — Weekly Schedule
             </div>
+
             <h2 className="text-display mt-3 text-4xl sm:text-5xl md:text-7xl">
               This week at Canvas.
             </h2>
           </div>
+
           <div>
             <div className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">
               17 Feb – 23 Feb 2026
             </div>
+
             <div className="-mx-6 flex gap-2 overflow-x-auto px-6 pb-1 md:mx-0 md:flex-wrap md:overflow-visible md:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {days.map((d, i) => (
-              <button
-                key={d}
-                className={`shrink-0 rounded-full px-4 py-2 text-sm transition-colors ${
-                  i === 2
-                    ? "bg-foreground text-background"
-                    : "border border-black/10 hover:bg-background"
-                }`}
-              >
-                {d}
-              </button>
-            ))}
-          </div>
+              {days.map((d, i) => (
+                <button
+                  key={d}
+                  className={`shrink-0 rounded-full px-4 py-2 text-sm transition-colors ${
+                    i === 2
+                      ? "bg-foreground text-background"
+                      : "border border-black/10 hover:bg-background"
+                  }`}
+                >
+                  {d}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -350,28 +401,37 @@ function WeeklySchedule() {
             <Reveal key={s.title + i} delay={i * 0.05}>
               <motion.div
                 whileHover={{ y: -4 }}
-                transition={{ type: "spring", stiffness: 300, damping: 24 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 300,
+                  damping: 24,
+                }}
                 className="group grid grid-cols-12 items-center gap-4 rounded-3xl border border-black/5 bg-background p-6 shadow-[0_1px_0_rgba(0,0,0,0.03)] hover:shadow-[0_20px_50px_-30px_rgba(0,0,0,0.35)]"
               >
                 <div className="col-span-12 md:col-span-3">
                   <div className="text-[10px] uppercase tracking-widest text-muted-foreground">
                     {s.type}
                   </div>
+
                   <div className="text-display mt-1 text-xl leading-tight">
                     {s.time}
                   </div>
                 </div>
+
                 <div
                   className={`col-span-1 hidden h-3 w-3 rounded-full ${s.color} md:block`}
                 />
+
                 <div className="col-span-12 md:col-span-6">
                   <div className="text-display text-2xl md:text-3xl">
                     {s.title}
                   </div>
+
                   <div className="mt-1 text-sm text-muted-foreground">
                     {s.subtitle}
                   </div>
                 </div>
+
                 <div className="col-span-12 md:col-span-2 md:text-right">
                   <Link
                     href={bookLink(s.slug)}
@@ -390,16 +450,41 @@ function WeeklySchedule() {
 }
 
 function UpcomingEvents() {
-  const [items, setItems] = useState<{ title: string; description: string; media: string; meta: string; cta: { label: string; to: string } }[]>([]);
+  const [
+    items,
+    setItems,
+  ] = useState<
+    {
+      title: string;
+      description: string;
+      media: string;
+      meta: string;
+      cta: { label: string; to: string };
+    }[]
+  >([]);
+
   useEffect(() => {
-    createClient().from("workshops").select("*").limit(2).then(({ data }) => {
-      if (data) setItems(data.map((w) => ({
-        title: w.title, description: w.title, media: w.img,
-        meta: `${w.date} · ${w.time}`,
-        cta: { label: "Reserve · " + formatINR(w.price), to: `/book?workshop=${w.slug}` },
-      })));
-    });
+    createClient()
+      .from("workshops")
+      .select("*")
+      .limit(2)
+      .then(({ data }) => {
+        if (data)
+          setItems(
+            data.map((w) => ({
+              title: w.title,
+              description: w.title,
+              media: w.img,
+              meta: `${w.date} · ${w.time}`,
+              cta: {
+                label: "Reserve · " + formatINR(w.price),
+                to: `/book?workshop=${w.slug}`,
+              },
+            }))
+          );
+      });
   }, []);
+
   return (
     <section className="overflow-hidden py-20 md:py-28">
       <div className="mx-auto mb-10 max-w-7xl px-6 md:mb-14">
@@ -408,20 +493,25 @@ function UpcomingEvents() {
             <div className="text-xs uppercase tracking-widest text-muted-foreground">
               03 — Upcoming Events
             </div>
+
             <SplitReveal
               text="Show up. Show out."
               className="text-display mt-3 max-w-3xl font-black leading-[0.9] text-[clamp(2.25rem,10vw,5.5rem)] md:text-7xl"
             />
           </div>
+
           <Link
             href="/classes"
             className="group text-sm underline underline-offset-8"
           >
-            View more <ArrowUpRight className="ml-0.5 inline-block h-3 w-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            View more{" "}
+            <ArrowUpRight className="ml-0.5 inline-block h-3 w-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </Link>
         </div>
       </div>
+
       <Scroll01 items={items} />
+
       {items.length > 0 && (
         <div className="mt-8 flex justify-center">
           <Link
@@ -496,11 +586,13 @@ function Disciplines() {
             <div className="text-xs uppercase tracking-widest text-background/50">
               05 — Disciplines
             </div>
+
             <SplitReveal
               text="Move in every language."
               className="text-display mt-3 max-w-2xl text-5xl md:text-7xl"
             />
           </div>
+
           <Link
             href="/classes"
             className="text-sm text-background/80 underline underline-offset-8"
@@ -520,13 +612,13 @@ const instructorMembers: TeamMember[] = [
     id: "1",
     name: "Gayatri Mane",
     role: "CHOREOGRAPHER · INSTRUCTOR",
-    image: "https://hvansfddxwulquacakou.supabase.co/storage/v1/object/public/team/Team1.png",
+    image: "/Team1.png",
   },
   {
     id: "2",
     name: "Sarang Lokhande",
     role: "CHOREOGRAPHER · INSTRUCTOR",
-    image: "https://hvansfddxwulquacakou.supabase.co/storage/v1/object/public/team/Team2.png",
+    image: "/Team2.png",
   },
 ];
 
@@ -538,32 +630,40 @@ function Instructors() {
           <div className="text-xs uppercase tracking-widest text-muted-foreground">
             06 — Instructors
           </div>
+
           <SplitReveal
             text="Meet the movers."
             className="text-display mt-3 text-5xl md:text-7xl"
           />
         </div>
+
         <p className="max-w-sm text-sm text-muted-foreground">
           A crew of choreographers, hosts and battle-tested performers holding
           down the Canvas floor.
         </p>
       </div>
+
       <TeamShowcase members={instructorMembers} />
     </section>
   );
 }
 
 function GalleryMarquee() {
-  const SUPA_STORAGE = "https://hvansfddxwulquacakou.supabase.co/storage/v1/object/public";
-  const gallery = Array.from({ length: 13 }, (_, i) => `${SUPA_STORAGE}/gallery/${i + 1}.png`);
+  const gallery = Array.from(
+    { length: 13 },
+    (_, i) => `/${i + 1}.png`
+  );
+
   const rowA = gallery.slice(0, 7);
   const rowB = gallery.slice(7);
+
   return (
     <section className="overflow-hidden bg-cream py-28">
       <div className="mx-auto mb-14 max-w-7xl px-6">
         <div className="text-xs uppercase tracking-widest text-muted-foreground">
           07 — Gallery
         </div>
+
         <SplitReveal
           text="Frames from the floor."
           className="text-display mt-3 text-5xl md:text-7xl"
@@ -571,7 +671,9 @@ function GalleryMarquee() {
       </div>
 
       <MarqueeRow images={rowA} direction="left" />
+
       <div className="h-6" />
+
       <MarqueeRow images={rowB} direction="right" />
     </section>
   );
@@ -585,12 +687,19 @@ function MarqueeRow({
   direction: "left" | "right";
 }) {
   const doubled = [...images, ...images];
+
   return (
     <div className="relative overflow-hidden">
       <motion.div
         className="flex gap-4 whitespace-nowrap"
-        animate={{ x: direction === "left" ? ["0%", "-50%"] : ["-50%", "0%"] }}
-        transition={{ duration: 22, ease: "linear", repeat: Infinity }}
+        animate={{
+          x: direction === "left" ? ["0%", "-50%"] : ["-50%", "0%"],
+        }}
+        transition={{
+          duration: 22,
+          ease: "linear",
+          repeat: Infinity,
+        }}
       >
         {doubled.map((src, i) => (
           <div
@@ -636,17 +745,20 @@ function Membership() {
       ],
     },
   ];
+
   return (
     <section className="mx-auto max-w-7xl px-6 py-28">
       <div className="mb-14">
         <div className="text-xs uppercase tracking-widest text-muted-foreground">
           09 — Membership
         </div>
+
         <SplitReveal
           text="Pick a rhythm that fits."
           className="text-display mt-3 text-5xl md:text-7xl"
         />
       </div>
+
       <div className="grid gap-6 md:grid-cols-3">
         {plans.map((p) => (
           <div
@@ -656,12 +768,15 @@ function Membership() {
             }`}
           >
             <div className="text-sm opacity-70">{p.name}</div>
+
             <div className="mt-4 flex items-baseline gap-1">
               <div className="text-display text-5xl md:text-6xl">
                 {formatINR(p.price)}
               </div>
+
               <div className="text-sm opacity-70">{p.per}</div>
             </div>
+
             <ul className="mt-8 space-y-2 text-sm">
               {p.perks.map((k) => (
                 <li key={k} className="flex gap-2">
@@ -670,6 +785,7 @@ function Membership() {
                 </li>
               ))}
             </ul>
+
             <Link
               href="/book"
               className={`mt-8 inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-sm ${
@@ -692,17 +808,20 @@ function Newsletter() {
     <section className="mx-auto max-w-7xl px-6 py-28">
       <div className="relative overflow-hidden rounded-[2.5rem] bg-cream p-10 md:p-16">
         <div className="mesh-bg absolute inset-0 opacity-60" />
+
         <div className="relative grid gap-10 md:grid-cols-2 md:items-end">
           <SplitReveal
             text="Get the drop. First classes, first releases."
             className="text-display text-5xl md:text-6xl"
           />
+
           <form className="flex w-full items-center gap-2 rounded-full bg-background p-2 shadow-lg">
             <input
               type="email"
               placeholder="you@studio.com"
               className="flex-1 bg-transparent px-4 py-3 text-sm outline-none"
             />
+
             <button className="rounded-full bg-foreground px-6 py-3 text-sm text-background">
               Join
             </button>
